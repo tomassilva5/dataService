@@ -24,17 +24,21 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x08\x65v.proto\"A\n\x12SalesFilterRequest\x12\x0f\n\x07\x63ountry\x18\x01 \x01(\t\x12\x0c\n\x04year\x18\x02 \x01(\x05\x12\x0c\n\x04mode\x18\x03 \x01(\t\"\x1f\n\nSalesReply\x12\x11\n\tsales_xml\x18\x01 \x03(\t2?\n\x07\x45VSales\x12\x34\n\x10GetSalesFiltered\x12\x13.SalesFilterRequest\x1a\x0b.SalesReplyb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x08\x65v.proto\x12\x02\x65v\"z\n\x12SalesFilterRequest\x12\x34\n\x07\x66ilters\x18\x01 \x03(\x0b\x32#.ev.SalesFilterRequest.FiltersEntry\x1a.\n\x0c\x46iltersEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x1f\n\nSalesReply\x12\x11\n\tsales_xml\x18\x01 \x03(\t2E\n\x07\x45VSales\x12:\n\x10GetSalesFiltered\x12\x16.ev.SalesFilterRequest\x1a\x0e.ev.SalesReplyb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'ev_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_SALESFILTERREQUEST']._serialized_start=12
-  _globals['_SALESFILTERREQUEST']._serialized_end=77
-  _globals['_SALESREPLY']._serialized_start=79
-  _globals['_SALESREPLY']._serialized_end=110
-  _globals['_EVSALES']._serialized_start=112
-  _globals['_EVSALES']._serialized_end=175
+  _globals['_SALESFILTERREQUEST_FILTERSENTRY']._loaded_options = None
+  _globals['_SALESFILTERREQUEST_FILTERSENTRY']._serialized_options = b'8\001'
+  _globals['_SALESFILTERREQUEST']._serialized_start=16
+  _globals['_SALESFILTERREQUEST']._serialized_end=138
+  _globals['_SALESFILTERREQUEST_FILTERSENTRY']._serialized_start=92
+  _globals['_SALESFILTERREQUEST_FILTERSENTRY']._serialized_end=138
+  _globals['_SALESREPLY']._serialized_start=140
+  _globals['_SALESREPLY']._serialized_end=171
+  _globals['_EVSALES']._serialized_start=173
+  _globals['_EVSALES']._serialized_end=242
 # @@protoc_insertion_point(module_scope)

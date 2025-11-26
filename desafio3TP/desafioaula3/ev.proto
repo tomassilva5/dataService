@@ -1,13 +1,13 @@
 syntax = "proto3";
 
+package ev;
+
 service EVSales {
   rpc GetSalesFiltered (SalesFilterRequest) returns (SalesReply);
 }
 
 message SalesFilterRequest {
-  string country = 1;
-  int32 year = 2;
-  string mode = 3;
+  map<string, string> filters = 1;  // field -> value
 }
 
 message SalesReply {

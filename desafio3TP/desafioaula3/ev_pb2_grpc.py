@@ -35,7 +35,7 @@ class EVSalesStub(object):
             channel: A grpc.Channel.
         """
         self.GetSalesFiltered = channel.unary_unary(
-                '/EVSales/GetSalesFiltered',
+                '/ev.EVSales/GetSalesFiltered',
                 request_serializer=ev__pb2.SalesFilterRequest.SerializeToString,
                 response_deserializer=ev__pb2.SalesReply.FromString,
                 _registered_method=True)
@@ -60,9 +60,9 @@ def add_EVSalesServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'EVSales', rpc_method_handlers)
+            'ev.EVSales', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('EVSales', rpc_method_handlers)
+    server.add_registered_method_handlers('ev.EVSales', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
@@ -83,7 +83,7 @@ class EVSales(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/EVSales/GetSalesFiltered',
+            '/ev.EVSales/GetSalesFiltered',
             ev__pb2.SalesFilterRequest.SerializeToString,
             ev__pb2.SalesReply.FromString,
             options,
