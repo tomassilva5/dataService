@@ -6,7 +6,7 @@ from lxml import etree
 from pathlib import Path
 
 class GenericXMLServicer(ev_pb2_grpc.EVSalesServicer):
-    XML_FILE = Path(__file__).parent.parent / "desafioaula2" / "data" / "output.xml"
+    XML_FILE = Path("/app/data/output.xml")
 
     def GetSalesFiltered(self, request, context):
         if not self.XML_FILE.exists():

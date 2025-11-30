@@ -20,7 +20,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ../../pgadmin_data:/var/lib/pgadmin
+      - pgadmin_data:/var/lib/pgadmin
 
   csv_loader:
     image: python:3.10-slim
@@ -54,8 +54,7 @@ services:
     ports:
       - "50051:50051"
     volumes:
-      - ../../desafioaula3/data:/app/data
+      - ../../desafioaula2/data:/app/data
 
-
-
-
+volumes:
+  pgadmin_data:
