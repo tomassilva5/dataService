@@ -5,7 +5,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456789
-      POSTGRES_DB: evdb
+      POSTGRES_DB: db_TP2B
     volumes:
       - ../pgdata:/var/lib/postgresql/data
     ports:
@@ -22,25 +22,6 @@ services:
     volumes:
       - ../pgadmin_data:/var/lib/pgadmin
 
-  # se já vais carregar a BD pelo XML via script dentro do próprio server,
-  # podes comentar/remover este serviço csv_loader.
-  # csv_loader:
-  #   image: python:3.10-slim
-  #   depends_on:
-  #     - db
-  #   volumes:
-  #     - ../../desafioaula2/data/ev_sales.csv:/workspace/ev_sales.csv:ro
-  #     - ../import_csv_to_postgres.py:/workspace/import_csv_to_postgres.py:ro
-  #   working_dir: /workspace
-  #   environment:
-  #     DB_HOST: db
-  #     DB_PORT: "5432"
-  #     DB_NAME: evdb
-  #     DB_USER: postgres
-  #     DB_PASSWORD: 123456789
-  #     CSV_PATH: /workspace/ev_sales.csv
-  #   command: bash -c "pip install psycopg2-binary pandas && python import_csv_to_postgres.py"
-
   grpc_server:
     build:
       context: ..
@@ -51,12 +32,12 @@ services:
       DB_HOST: db
       DB_PORT: "5432"
       DB_NAME: db_TP2B
-      DB_USER: postgres   # corrigido: estava 'postgress'
+      DB_USER: postgres
       DB_PASSWORD: 123456789
+      XML_PATH: /app/data/output.xml
     ports:
       - "50051:50051"
     volumes:
-      # monta a pasta server/data local em /app/data dentro do container
       - ../data:/app/data
 
 volumes:

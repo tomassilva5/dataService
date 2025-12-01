@@ -14,14 +14,12 @@ import ev_pb2
 import ev_pb2_grpc
 from csv_to_xml_ev import convert_csv_to_xml
 from schema_generator import generate_xsd_from_xml, validate_xml_with_xsd
+from import_xml_to_postgres import main as load_xml_to_db
 
 
 class GenericXMLServicer(ev_pb2_grpc.EVSalesServicer):
     # ========== CAMINHO XML ==========
-    # VERSÃO DOCKER:
     XML_FILE = Path("/app/data/output.xml")
-    # PARA TESTAR SEM DOCKER:
-    # XML_FILE = BASE_DIR / "data" / "output.xml"
 
     def __init__(self):
         # gera/atualiza o XML a partir do CSV
@@ -32,6 +30,13 @@ class GenericXMLServicer(ev_pb2_grpc.EVSalesServicer):
         self.xml_valid = validate_xml_with_xsd()
         if not self.xml_valid:
             print("[Error] XML not valid against XSD")
+        else:
+            print("[Info] XML is valid, loading into DB...")
+            try:
+                load_xml_to_db()
+                print("[Info] Database db_TP2B created/updated from XML.")
+            except Exception as e:
+                print(f"[Error] Failed to load XML into DB: {e}")
 
     def GetSalesFiltered(self, request, context):
         if not self.xml_valid:
@@ -102,7 +107,6 @@ class GenericXMLServicer(ev_pb2_grpc.EVSalesServicer):
 
         print(f"[Info] Filters: {dict(filters)} -> {len(sales)} records found")
 
-        # gerar XML apenas com os resultados filtrados
         if matched_nodes:
             results_root = etree.Element(root.tag)  # ex.: ev_sales
             for node in matched_nodes:
@@ -110,10 +114,7 @@ class GenericXMLServicer(ev_pb2_grpc.EVSalesServicer):
 
             result_tree = etree.ElementTree(results_root)
 
-            # VERSÃO DOCKER:
             result_path = Path("/app/data/filtered_results.xml")
-            # PARA TESTAR SEM DOCKER:
-            # result_path = BASE_DIR / "data" / "filtered_results.xml"
 
             result_tree.write(
                 str(result_path),

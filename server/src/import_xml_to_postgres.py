@@ -4,7 +4,7 @@ from pathlib import Path
 
 import psycopg2
 from psycopg2.extras import execute_values
-from lxml import etree  # para ler o XML[web:36]
+from lxml import etree  # para ler o XML
 
 
 def wait_for_db(host, port, user, password, db, timeout=60):
@@ -31,13 +31,12 @@ def to_int(x):
 
 
 def main():
-    host = os.getenv("DB_HOST", "localhost")
+    host = os.getenv("DB_HOST", "db")
     port = int(os.getenv("DB_PORT", 5432))
-    user = os.getenv("DB_USER", "evuser")
-    password = os.getenv("DB_PASSWORD", "evpass")
+    user = os.getenv("DB_USER", "postgres")
+    password = os.getenv("DB_PASSWORD", "123456789")
     db = os.getenv("DB_NAME", "db_TP2B")
 
-    # caminho para o XML gerado pelo server (ajusta se for diferente)
     xml_path = Path(os.getenv("XML_PATH", "/app/data/output.xml"))
 
     print(f"Loader (XML): waiting for DB {host}:{port} (db={db})")
@@ -48,7 +47,6 @@ def main():
 
     print(f"Reading XML from {xml_path}...")
 
-    # lê o XML: raiz <ev_sales>, filhos <ev_sale> com elementos simples
     tree = etree.parse(str(xml_path))
     root = tree.getroot()  # <ev_sales>
 
@@ -57,7 +55,6 @@ def main():
     )
     cur = conn.cursor()
 
-    # tabela compatível com o XSD que enviaste
     cur.execute(
         """
         CREATE TABLE IF NOT EXISTS ev_sales (
@@ -77,7 +74,6 @@ def main():
     conn.commit()
 
     records = []
-    # cada <ev_sale> vira uma linha
     for sale in root.findall("ev_sale"):
         region = sale.findtext("region") or ""
         category = sale.findtext("category") or ""
