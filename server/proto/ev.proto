@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package ev;
+
+service EVSales {
+  rpc GetSalesFiltered (SalesFilterRequest) returns (SalesReply);
+}
+
+message SalesFilterRequest {
+  map<string, string> filters = 1;  // field -> value
+}
+
+message SalesReply {
+  repeated string sales_xml = 1;
+}
