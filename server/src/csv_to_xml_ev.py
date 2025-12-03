@@ -1,33 +1,42 @@
 import pandas as pd
 from pathlib import Path
+from typing import List
+import logging
 
-# ========== PATH DATA ==========
-
-# VERSÃO DOCKER:
-DATA_DIR = Path("/app/data")
-
-# PARA TESTAR SEM DOCKER:
-# BASE_DIR = Path(__file__).resolve().parent.parent  # .../TP2-B/server
-# DATA_DIR = BASE_DIR / "data"
-
-CSV_PATH = DATA_DIR / "ev_sales.csv"
-XML_PATH = DATA_DIR / "output.xml"
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
-def convert_csv_to_xml():
-    df = pd.read_csv(CSV_PATH, dtype=str)
+DATA_DIR = Path("/app/data") 
+XML_PATH = DATA_DIR / "output.xml" 
+
+
+def convert_csv_to_xml(input_csv_path: Path) -> List[str]:
+    if not input_csv_path.exists():
+        raise FileNotFoundError(f"CSV file not found at: {input_csv_path}")
+
+    df = pd.read_csv(input_csv_path) 
+    
+    column_names = list(df.columns)
 
     xml_raw = df.to_xml(
-        root_name="ev_sales",
-        row_name="ev_sale",
+        root_name="dataset",
+        row_name="row",
         index=False
     )
 
-    with open(XML_PATH, "w", encoding="utf-8") as f:
-        f.write(xml_raw)
+    try:
+        with open(XML_PATH, "w", encoding="utf-8") as f:
+            f.write(xml_raw)
+        logging.info(f"XML created: {XML_PATH}")
+    except Exception as e:
+        logging.error(f"Error writing XML file: {e}")
+        raise
 
-    print(f"XML created: {XML_PATH}")
-
+    return column_names
 
 if __name__ == "__main__":
-    convert_csv_to_xml()
+    DEFAULT_CSV_PATH = DATA_DIR / "test.csv" 
+    try:
+        convert_csv_to_xml(DEFAULT_CSV_PATH)
+    except FileNotFoundError as e:
+        logging.error(f"Could not run local test: {e}")

@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
-  <xs:element name="ev_sales">
+  <xs:element name="dataset">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="ev_sale" maxOccurs="unbounded">
+        <xs:element name="row" maxOccurs="unbounded" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="region" type="xs:string" />
@@ -11,7 +11,7 @@
               <xs:element name="parameter" type="xs:string" />
               <xs:element name="mode" type="xs:string" />
               <xs:element name="powertrain" type="xs:string" />
-              <xs:element name="year" type="xs:integer" />
+              <xs:element name="year" type="xs:string" />
               <xs:element name="unit" type="xs:string" />
               <xs:element name="value" type="xs:string" />
               <xs:element name="percentage" type="xs:string" />

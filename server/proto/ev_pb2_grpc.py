@@ -26,7 +26,10 @@ if _version_not_supported:
 
 
 class EVSalesStub(object):
-    """Missing associated documentation comment in .proto file."""
+    """====================================================================
+    Definição do Serviço
+    ====================================================================
+    """
 
     def __init__(self, channel):
         """Constructor.
@@ -35,17 +38,33 @@ class EVSalesStub(object):
             channel: A grpc.Channel.
         """
         self.GetSalesFiltered = channel.unary_unary(
-                '/ev.EVSales/GetSalesFiltered',
+                '/ev_sales.EVSales/GetSalesFiltered',
                 request_serializer=ev__pb2.SalesFilterRequest.SerializeToString,
                 response_deserializer=ev__pb2.SalesReply.FromString,
+                _registered_method=True)
+        self.UploadDataset = channel.stream_unary(
+                '/ev_sales.EVSales/UploadDataset',
+                request_serializer=ev__pb2.UploadRequest.SerializeToString,
+                response_deserializer=ev__pb2.UploadStatus.FromString,
                 _registered_method=True)
 
 
 class EVSalesServicer(object):
-    """Missing associated documentation comment in .proto file."""
+    """====================================================================
+    Definição do Serviço
+    ====================================================================
+    """
 
     def GetSalesFiltered(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Método 1: Consulta de filtros (existente)
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def UploadDataset(self, request_iterator, context):
+        """Método 2: Dataset Upload (Obrigatório para o Servidor Dinâmico)
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -58,16 +77,24 @@ def add_EVSalesServicer_to_server(servicer, server):
                     request_deserializer=ev__pb2.SalesFilterRequest.FromString,
                     response_serializer=ev__pb2.SalesReply.SerializeToString,
             ),
+            'UploadDataset': grpc.stream_unary_rpc_method_handler(
+                    servicer.UploadDataset,
+                    request_deserializer=ev__pb2.UploadRequest.FromString,
+                    response_serializer=ev__pb2.UploadStatus.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'ev.EVSales', rpc_method_handlers)
+            'ev_sales.EVSales', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
-    server.add_registered_method_handlers('ev.EVSales', rpc_method_handlers)
+    server.add_registered_method_handlers('ev_sales.EVSales', rpc_method_handlers)
 
 
  # This class is part of an EXPERIMENTAL API.
 class EVSales(object):
-    """Missing associated documentation comment in .proto file."""
+    """====================================================================
+    Definição do Serviço
+    ====================================================================
+    """
 
     @staticmethod
     def GetSalesFiltered(request,
@@ -83,9 +110,36 @@ class EVSales(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/ev.EVSales/GetSalesFiltered',
+            '/ev_sales.EVSales/GetSalesFiltered',
             ev__pb2.SalesFilterRequest.SerializeToString,
             ev__pb2.SalesReply.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def UploadDataset(request_iterator,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.stream_unary(
+            request_iterator,
+            target,
+            '/ev_sales.EVSales/UploadDataset',
+            ev__pb2.UploadRequest.SerializeToString,
+            ev__pb2.UploadStatus.FromString,
             options,
             channel_credentials,
             insecure,
